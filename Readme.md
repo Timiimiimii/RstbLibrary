@@ -1,6 +1,6 @@
 # RSTB Library
 
-C# managed wrapper and implementations for sYaz0 compression and decompression.
+C# library for reading and writing RESTBL files for Totk
 
 ### Usage
 

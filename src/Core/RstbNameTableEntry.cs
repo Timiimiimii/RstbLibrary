@@ -5,25 +5,25 @@ using System.Text;
 
 namespace RstbLibrary.Core;
 
-[StructLayout(LayoutKind.Sequential, Size = 132)]
+[StructLayout(LayoutKind.Sequential, Size = 164)]
 public ref struct RstbNameTableEntry
 {
     public ReadOnlySpan<byte> name;
     public uint size;
 
-    public static unsafe void Write(string name, uint size, Span<byte> data, int offset, Endianness endian)
+    public static unsafe void Write(string name, uint size, Span<byte> data, int offset, int blockSize, Endianness endian)
     {
         Span<byte> sub = data[offset..];
         ReadOnlySpan<byte> nameData = Encoding.UTF8.GetBytes(name);
-        for (int i = 0; i < (nameData.Length <= 128 ? nameData.Length : 128); i++) {
+        for (int i = 0; i < (nameData.Length <= blockSize ? nameData.Length : blockSize); i++) {
             sub[i] = nameData[i];
         }
 
         if (endian == Endianness.Big) {
-            BinaryPrimitives.WriteUInt32BigEndian(sub[128..132], size);
+            BinaryPrimitives.WriteUInt32BigEndian(sub[blockSize..(blockSize + 4)], size);
         }
         else {
-            BinaryPrimitives.WriteUInt32LittleEndian(sub[128..132], size);
+            BinaryPrimitives.WriteUInt32LittleEndian(sub[blockSize..(blockSize + 4)], size);
         }
     }
 
@@ -34,12 +34,12 @@ public ref struct RstbNameTableEntry
         }
     }
 
-    public RstbNameTableEntry(ReadOnlySpan<byte> data, int offset, Endianness endian)
+    public RstbNameTableEntry(ReadOnlySpan<byte> data, int offset, int blockSize, Endianness endian)
     {
         ReadOnlySpan<byte> sub = data[offset..];
-        name = sub[0..128];
+        name = sub[0..blockSize];
         size = endian == Endianness.Big
-            ? BinaryPrimitives.ReadUInt32BigEndian(sub[128..132])
-            : BinaryPrimitives.ReadUInt32LittleEndian(sub[128..132]);
+            ? BinaryPrimitives.ReadUInt32BigEndian(sub[blockSize..(blockSize + 4)])
+            : BinaryPrimitives.ReadUInt32LittleEndian(sub[blockSize..(blockSize + 4)]);
     }
 }
