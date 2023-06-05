@@ -10,8 +10,8 @@ public enum Endianness
 
 public class RSTB
 {
-    public Dictionary<uint, uint> CrcMap { get; set; } = new();
-    public Dictionary<string, uint> NameMap { get; set; } = new();
+    public SortedDictionary<uint, uint> CrcMap { get; set; } = new();
+    public SortedDictionary<string, uint> NameMap { get; set; } = new();
 
     public static RSTB FromBinary(ReadOnlySpan<byte> data, Endianness endian = Endianness.Little)
     {
