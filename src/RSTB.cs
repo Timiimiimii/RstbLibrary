@@ -46,7 +46,7 @@ public class RSTB
         Span<byte> data = new byte[header.GetBufferSize()];
         header.Write(data, offset: 0, endian);
 
-        int writeOffset = 22;
+        int writeOffset = 12;
 
         foreach ((uint hash, uint size) in CrcMap) {
             RstbCrcTableEntry.Write(hash, size, data, writeOffset, endian);
