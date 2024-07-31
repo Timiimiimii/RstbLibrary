@@ -10,10 +10,10 @@ public enum Endianness
 
 public class RSTB
 {
-    public Dictionary<uint, uint> CrcMap { get; set; } = new();
-    public Dictionary<string, uint> NameMap { get; set; } = new();
+    public SortedDictionary<uint, uint> CrcMap { get; set; } = new();
+    public SortedDictionary<string, uint> NameMap { get; set; } = new();
 
-    public static RSTB FromBinary(ReadOnlySpan<byte> data, Endianness endian)
+    public static RSTB FromBinary(ReadOnlySpan<byte> data, Endianness endian = Endianness.Little)
     {
         RSTB rstb = new();
         RstbHeader header = new(data, endian);
@@ -24,7 +24,7 @@ public class RSTB
         }
 
         for (int i = 0; i < header.NameMapCount; i++) {
-            RstbNameTableEntry entry = new(data, 12 + (header.CrcMapCount * 8) + (132 * i), endian);
+            RstbNameTableEntry entry = new(data, 12 + (header.CrcMapCount * 8) + (256 * i), endian);
             if (entry.GetManagedName() is string key) {
                 rstb.NameMap.Add(key, entry.size);
             }
@@ -39,7 +39,7 @@ public class RSTB
             ?? throw new InvalidDataException("Invalid source json, the deserializer returned null");
     }
 
-    public Span<byte> ToBinary(Endianness endian)
+    public Span<byte> ToBinary(Endianness endian = Endianness.Little)
     {
         RstbHeader header = new(CrcMap.Count, NameMap.Count);
 
@@ -55,7 +55,7 @@ public class RSTB
 
         foreach ((string name, uint size) in NameMap) {
             RstbNameTableEntry.Write(name, size, data, writeOffset, endian);
-            writeOffset += 132; // sizeof(RstbNameTableEntry)
+            writeOffset += 256; // sizeof(RstbNameTableEntry)
         }
 
         return data;

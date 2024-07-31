@@ -17,7 +17,7 @@ internal readonly ref struct RstbHeader
     {
         int headerSize = 12; // Marshal.SizeOf<RstbHeader>();
         int crcEntrySize = 8; // Marshal.SizeOf<RstbCrcTableEntry>();
-        int nameEntrySize = 132; // Marshal.SizeOf<RstbNameTableEntry>();
+        int nameEntrySize = 256; // Marshal.SizeOf<RstbNameTableEntry>();
 
         return headerSize + (_crcMapCount * crcEntrySize) + (_nameMapCount * nameEntrySize);
     }
