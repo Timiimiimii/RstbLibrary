@@ -19,7 +19,7 @@ public class RSTB
         RstbHeader header = new(data, endian);
 
         for (int i = 0; i < header.CrcMapCount; i++) {
-            RstbCrcTableEntry entry = new(data, 12 + (8 * i), endian);
+            RstbCrcTableEntry entry = new(data, 22 + (8 * i), endian);
             rstb.CrcMap.Add(entry.hash, entry.size);
         }
 
@@ -41,7 +41,7 @@ public class RSTB
 
     public Span<byte> ToBinary(Endianness endian = Endianness.Little)
     {
-        RstbHeader header = new(CrcMap.Count, NameMap.Count);
+        RstbHeader header = new(1, 160, CrcMap.Count, NameMap.Count);
 
         Span<byte> data = new byte[header.GetBufferSize()];
         header.Write(data, offset: 0, endian);

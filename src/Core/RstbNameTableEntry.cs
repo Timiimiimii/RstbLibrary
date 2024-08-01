@@ -11,7 +11,7 @@ public ref struct RstbNameTableEntry
     public ReadOnlySpan<byte> name;
     public uint size;
 
-    public static unsafe void Write(string name, uint size, Span<byte> data, int offset, Endianness endian)
+    public static unsafe void Write(string name, uint size, Span<byte> data, int offset, int blockSize, Endianness endian)
     {
         Span<byte> sub = data[offset..];
         ReadOnlySpan<byte> nameData = Encoding.UTF8.GetBytes(name);
@@ -34,7 +34,7 @@ public ref struct RstbNameTableEntry
         }
     }
 
-    public RstbNameTableEntry(ReadOnlySpan<byte> data, int offset, Endianness endian)
+    public RstbNameTableEntry(ReadOnlySpan<byte> data, int offset, int blockSize, Endianness endian)
     {
         ReadOnlySpan<byte> sub = data[offset..];
         name = sub[0..252];
