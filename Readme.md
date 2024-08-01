@@ -1,27 +1,6 @@
 # RSTB Library
 
-C# library for reading and writing RESTBL files for Totk
-
-### Usage
-
-```
-...
-```
-
-### Install
-
-[![NuGet](https://img.shields.io/nuget/v/RstbLibrary.svg)](https://www.nuget.org/packages/RstbLibrary) [![NuGet](https://img.shields.io/nuget/dt/RstbLibrary.svg)](https://www.nuget.org/packages/RstbLibrary)
-
-#### NuGet
-```powershell
-Install-Package RstbLibrary
-```
-
-#### Build From Source
-```batch
-git clone https://github.com/NCF-Library/RstbLibrary.git
-dotnet build RstbLibrary
-```
+C# library for reading and writing RSTB files for NSS
 
 ### Credit
 
